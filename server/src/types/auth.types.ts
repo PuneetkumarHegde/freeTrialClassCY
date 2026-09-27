@@ -43,6 +43,14 @@ export const adminAppointmentsQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   status: z.enum(['CONFIRMED', 'CANCELLED', 'COMPLETED']).optional(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+  sortOrder: z.enum(['asc', 'desc']).optional().default('asc'),
 });
 
-export type AdminAppointmentsQuery = z.infer<typeof adminAppointmentsQuerySchema>;
+export type AdminAppointmentsQuery = {
+  page: number;
+  limit: number;
+  status?: 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | AppointmentStatus;
+  date?: string;
+  sortOrder?: 'asc' | 'desc';
+};
+

@@ -81,8 +81,13 @@ export const AdminDashboard: React.FC = () => {
   // Bookings state
   const [appointments, setAppointments] = useState<AdminAppointmentItem[]>([]);
   const [bookingStatusFilter, setBookingStatusFilter] = useState<string>('');
+  const [bookingSortOrder, setBookingSortOrder] = useState<'asc' | 'desc'>('asc');
   const [selectedBooking, setSelectedBooking] = useState<AdminAppointmentItem | null>(null);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [bookingToCancel, setBookingToCancel] = useState<AdminAppointmentItem | null>(null);
+  const [mentorToTerminate, setMentorToTerminate] = useState<AdminMentorItem | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [isLoadingBookings, setIsLoadingBookings] = useState(false);
 
   // Completed Trials state
   const [completedTrials, setCompletedTrials] = useState<CompletedTrialItem[]>([]);
@@ -99,6 +104,23 @@ export const AdminDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Fast, dedicated database-side bookings query
+  const loadBookings = useCallback(async (status?: string, sortOrder: 'asc' | 'desc' = 'asc') => {
+    setIsLoadingBookings(true);
+    try {
+      const apps = await fetchAdminAppointments({
+        limit: 50,
+        status: status || undefined,
+        sortOrder,
+      });
+      setAppointments(apps.items);
+    } catch (err: unknown) {
+      console.error('Failed to load appointments:', err);
+    } finally {
+      setIsLoadingBookings(false);
+    }
+  }, []);
+
   const loadAllAdminData = useCallback(async () => {
     setIsLoading(true);
     setErrorMsg(null);
@@ -106,7 +128,7 @@ export const AdminDashboard: React.FC = () => {
       const [sum, mList, apps, comp, emails, notifs] = await Promise.all([
         fetchAdminDashboard(),
         fetchAdminMentors(),
-        fetchAdminAppointments({ limit: 50, status: bookingStatusFilter || undefined }),
+        fetchAdminAppointments({ limit: 50, sortOrder: 'asc' }),
         fetchCompletedTrials({ limit: 50 }),
         fetchEmailLogs(),
         fetchNotifications(),
@@ -125,11 +147,28 @@ export const AdminDashboard: React.FC = () => {
       setIsLoading(false);
       setIsLoadingSummary(false);
     }
-  }, [bookingStatusFilter]);
+  }, []);
 
   useEffect(() => {
     loadAllAdminData();
   }, [loadAllAdminData]);
+
+  const handleStatusFilterChange = (status: string) => {
+    setBookingStatusFilter(status);
+    loadBookings(status, bookingSortOrder);
+  };
+
+  const handleSortOrderChange = (order: 'asc' | 'desc') => {
+    setBookingSortOrder(order);
+    loadBookings(bookingStatusFilter, order);
+  };
+
+  const handleCancelBooking = (bookingId: string) => {
+    const app = appointments.find((a) => a.id === bookingId);
+    if (app) {
+      setBookingToCancel(app);
+    }
+  };
 
   const handleCreateMentor = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,8 +188,15 @@ export const AdminDashboard: React.FC = () => {
       setNewMentorName('');
       setNewMentorEmail('');
       await loadAllAdminData();
+      setActionFeedback({
+        type: 'success',
+        message: `Mentor ${newMentorName} successfully created and added to capacity.`,
+      });
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to create mentor');
+      setActionFeedback({
+        type: 'error',
+        message: err instanceof Error ? err.message : 'Failed to create mentor.',
+      });
     } finally {
       setIsCreatingMentor(false);
     }
@@ -163,30 +209,60 @@ export const AdminDashboard: React.FC = () => {
       const data = await fetchAdminMentorDashboard(mentorId);
       setInspectedMentorData(data);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to load mentor dashboard');
+      setActionFeedback({
+        type: 'error',
+        message: err instanceof Error ? err.message : 'Failed to load mentor dashboard',
+      });
     } finally {
       setIsLoadingInspector(false);
     }
   };
 
-  const handleTerminateMentor = async (mentorId: string, mentorName: string) => {
-    if (!window.confirm(`Are you sure you want to terminate mentor ${mentorName}? They will be excluded from active scheduling capacity, but all historical appointments will remain intact.`)) {
-      return;
-    }
+  // Terminate mentor handler with in-app confirmation modal
+  const handleConfirmTerminateMentor = async () => {
+    if (!mentorToTerminate) return;
+    const { id, fullName } = mentorToTerminate;
     try {
-      await terminateAdminMentor(mentorId);
-      await loadAllAdminData();
+      await terminateAdminMentor(id);
+      const [mList, sum] = await Promise.all([
+        fetchAdminMentors(),
+        fetchAdminDashboard(),
+      ]);
+      setMentors(mList);
+      setSummary(sum);
+
+      setActionFeedback({
+        type: 'success',
+        message: `Mentor ${fullName} has been terminated and excluded from active scheduling capacity. All historical appointments and records are preserved.`,
+      });
+      setMentorToTerminate(null);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to terminate mentor');
+      setActionFeedback({
+        type: 'error',
+        message: err instanceof Error ? err.message : 'Failed to terminate mentor.',
+      });
     }
   };
 
   const handleReactivateMentor = async (mentorId: string) => {
     try {
       await reactivateAdminMentor(mentorId);
-      await loadAllAdminData();
+      const [mList, sum] = await Promise.all([
+        fetchAdminMentors(),
+        fetchAdminDashboard(),
+      ]);
+      setMentors(mList);
+      setSummary(sum);
+
+      setActionFeedback({
+        type: 'success',
+        message: 'Mentor has been reactivated and restored to daily capacity.',
+      });
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to reactivate mentor');
+      setActionFeedback({
+        type: 'error',
+        message: err instanceof Error ? err.message : 'Failed to reactivate mentor.',
+      });
     }
   };
 
@@ -194,8 +270,15 @@ export const AdminDashboard: React.FC = () => {
     try {
       await approveAdminMentorUnavailability(unavailabilityId);
       await loadAllAdminData();
+      setActionFeedback({
+        type: 'success',
+        message: 'Mentor unavailability request approved.',
+      });
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to approve unavailability');
+      setActionFeedback({
+        type: 'error',
+        message: err instanceof Error ? err.message : 'Failed to approve unavailability.',
+      });
     }
   };
 
@@ -203,25 +286,51 @@ export const AdminDashboard: React.FC = () => {
     try {
       await rejectAdminMentorUnavailability(unavailabilityId);
       await loadAllAdminData();
+      setActionFeedback({
+        type: 'success',
+        message: 'Mentor unavailability request rejected.',
+      });
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to reject unavailability');
+      setActionFeedback({
+        type: 'error',
+        message: err instanceof Error ? err.message : 'Failed to reject unavailability.',
+      });
     }
   };
 
-  const handleCancelBooking = async (id: string) => {
-    if (!window.confirm('Are you sure you want to cancel this booking? This will free up the mentor capacity.')) {
-      return;
-    }
-
+  // Cancel booking handler with in-app confirmation modal
+  const handleConfirmCancelBooking = async () => {
+    if (!bookingToCancel) return;
+    const { id, bookingId } = bookingToCancel;
     setCancellingId(id);
     try {
       await cancelAdminAppointment(id);
-      await loadAllAdminData();
+
+      // Refresh appointments and dashboard metrics immediately
+      const [apps, sum, mList] = await Promise.all([
+        fetchAdminAppointments({ limit: 50, status: bookingStatusFilter || undefined, sortOrder: bookingSortOrder }),
+        fetchAdminDashboard(),
+        fetchAdminMentors(),
+      ]);
+
+      setAppointments(apps.items);
+      setSummary(sum);
+      setMentors(mList);
+
       if (selectedBooking && selectedBooking.id === id) {
         setSelectedBooking((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null));
       }
+
+      setActionFeedback({
+        type: 'success',
+        message: `Booking ${bookingId} has been successfully cancelled. Daily capacity has been released and metrics updated.`,
+      });
+      setBookingToCancel(null);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to cancel appointment');
+      setActionFeedback({
+        type: 'error',
+        message: err instanceof Error ? err.message : 'Failed to cancel appointment.',
+      });
     } finally {
       setCancellingId(null);
     }
@@ -255,10 +364,12 @@ export const AdminDashboard: React.FC = () => {
     try {
       const d = new Date(isoStr);
       return d.toLocaleString('en-US', {
+        timeZone: 'Asia/Kolkata',
         month: 'short',
         day: 'numeric',
-        hour: '2-digit',
+        hour: 'numeric',
         minute: '2-digit',
+        hour12: true,
       });
     } catch {
       return isoStr;
@@ -314,6 +425,32 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        {/* Action Feedback Banner */}
+        {actionFeedback && (
+          <div
+            className={`p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs shadow-2xs ${
+              actionFeedback.type === 'success'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                : 'bg-rose-50 border-rose-200 text-rose-900'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              {actionFeedback.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              )}
+              <span className="font-semibold">{actionFeedback.message}</span>
+            </div>
+            <button
+              onClick={() => setActionFeedback(null)}
+              className="p-1 text-slate-400 hover:text-slate-700 rounded-md cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         {/* Metric Cards Row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white rounded-2xl border border-[#E5E7EB] p-5 shadow-2xs space-y-1">
@@ -583,7 +720,7 @@ export const AdminDashboard: React.FC = () => {
 
                           {m.isActive ? (
                             <button
-                              onClick={() => handleTerminateMentor(m.id, m.fullName)}
+                              onClick={() => setMentorToTerminate(m)}
                               className="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                               title="Terminate mentor and remove from capacity while preserving historical bookings"
                             >
@@ -718,15 +855,30 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <select
-                  value={bookingStatusFilter}
-                  onChange={(e) => setBookingStatusFilter(e.target.value)}
+                  value={bookingSortOrder}
+                  onChange={(e) => handleSortOrderChange(e.target.value as 'asc' | 'desc')}
                   className="bg-white border border-[#E5E7EB] rounded-xl px-3 py-1.5 text-xs text-[#172033] focus:outline-none"
+                  title="Sort by booking date and time"
+                >
+                  <option value="asc">Earliest First</option>
+                  <option value="desc">Latest First</option>
+                </select>
+
+                <select
+                  value={bookingStatusFilter}
+                  onChange={(e) => handleStatusFilterChange(e.target.value)}
+                  className="bg-white border border-[#E5E7EB] rounded-xl px-3 py-1.5 text-xs text-[#172033] focus:outline-none"
+                  title="Filter by booking status"
                 >
                   <option value="">All Statuses</option>
                   <option value="CONFIRMED">CONFIRMED</option>
                   <option value="COMPLETED">COMPLETED</option>
                   <option value="CANCELLED">CANCELLED</option>
                 </select>
+
+                {isLoadingBookings && (
+                  <Loader2 className="w-4 h-4 animate-spin text-[#4F6B8A]" />
+                )}
               </div>
             </div>
 
@@ -1190,6 +1342,256 @@ export const AdminDashboard: React.FC = () => {
               <pre className="p-3 bg-[#172033] text-slate-100 rounded-xl overflow-x-auto text-[11px] whitespace-pre-wrap font-mono">
                 {selectedEmailLog.emailContent}
               </pre>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Trial Booking Details Modal */}
+      {selectedBooking && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="font-mono text-xs font-bold text-[#4F6B8A] bg-[#F1F5F9] px-2 py-0.5 rounded-md">
+                  {selectedBooking.bookingId}
+                </span>
+                <h3 className="text-lg font-bold text-[#172033] font-serif mt-1">
+                  Trial Booking Details
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedBooking(null)}
+                className="text-slate-400 hover:text-slate-700 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs bg-[#FAFAF8] p-4 rounded-xl border border-[#E5E7EB]">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span className="text-[#64748B] block">Student:</span>
+                  <strong className="text-sm text-[#172033]">{selectedBooking.studentName}</strong>
+                </div>
+                <div>
+                  <span className="text-[#64748B] block">Grade:</span>
+                  <strong className="text-sm text-[#172033]">{selectedBooking.studentGrade}</strong>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[#64748B] block">Subject:</span>
+                <strong className="text-[#172033]">{selectedBooking.subject}</strong>
+              </div>
+
+              {selectedBooking.learningGoal && (
+                <div>
+                  <span className="text-[#64748B] block">Learning Goal:</span>
+                  <p className="text-slate-700 italic mt-0.5">{selectedBooking.learningGoal}</p>
+                </div>
+              )}
+
+              <div className="pt-2 border-t border-[#E5E7EB]">
+                <span className="text-[#64748B] block">Parent Contact:</span>
+                <span className="font-semibold text-[#172033]">{selectedBooking.parent.name}</span>
+                <span className="block font-mono text-[#64748B] text-[11px]">{selectedBooking.parent.email}</span>
+              </div>
+
+              <div className="pt-2 border-t border-[#E5E7EB]">
+                <span className="text-[#64748B] block">Assigned Mentor:</span>
+                <span className="font-semibold text-[#172033]">{selectedBooking.mentor.name}</span>
+                <span className="block font-mono text-[#64748B] text-[11px]">{selectedBooking.mentor.email}</span>
+              </div>
+
+              <div className="pt-2 border-t border-[#E5E7EB] flex items-center justify-between">
+                <div>
+                  <span className="text-[#64748B] block">Scheduled Time:</span>
+                  <span className="font-mono text-[#172033] font-semibold">{formatTzDate(selectedBooking.startTime)}</span>
+                </div>
+                <div>
+                  <span className="text-[#64748B] block">Status:</span>
+                  <span
+                    className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${
+                      selectedBooking.status === 'COMPLETED'
+                        ? 'bg-emerald-50 text-emerald-700'
+                        : selectedBooking.status === 'CONFIRMED'
+                        ? 'bg-blue-50 text-blue-700'
+                        : 'bg-rose-50 text-rose-700'
+                    }`}
+                  >
+                    {selectedBooking.status}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setSelectedBooking(null)}
+                className="px-4 py-2 text-xs font-semibold text-[#64748B] hover:text-[#172033]"
+              >
+                Close
+              </button>
+              {selectedBooking.status === 'CONFIRMED' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const toCancel = selectedBooking;
+                    setSelectedBooking(null);
+                    setBookingToCancel(toCancel);
+                  }}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 border border-rose-300 px-3.5 py-2 rounded-xl transition-colors cursor-pointer"
+                >
+                  <span>Cancel Booking</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Trial Booking Cancellation Confirmation Modal */}
+      {bookingToCancel && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="font-mono text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md">
+                  {bookingToCancel.bookingId}
+                </span>
+                <h3 className="text-lg font-bold text-[#172033] font-serif mt-1">
+                  Cancel Trial Booking
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setBookingToCancel(null)}
+                className="text-slate-400 hover:text-slate-700 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-2 text-xs bg-[#FAFAF8] p-4 rounded-xl border border-[#E5E7EB]">
+              <div>
+                <span className="text-[#64748B]">Student:</span>{' '}
+                <strong className="text-[#172033]">{bookingToCancel.studentName}</strong> (Grade {bookingToCancel.studentGrade}, {bookingToCancel.subject})
+              </div>
+              <div>
+                <span className="text-[#64748B]">Parent:</span>{' '}
+                <span className="text-[#172033]">{bookingToCancel.parent.name} ({bookingToCancel.parent.email})</span>
+              </div>
+              <div>
+                <span className="text-[#64748B]">Assigned Mentor:</span>{' '}
+                <span className="text-[#172033] font-medium">{bookingToCancel.mentor.name}</span>
+              </div>
+              <div>
+                <span className="text-[#64748B]">Date / Time:</span>{' '}
+                <span className="text-[#172033] font-mono">{formatTzDate(bookingToCancel.startTime)}</span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs space-y-1">
+              <p className="font-semibold">Cancellation effects:</p>
+              <ul className="list-disc list-inside text-[11px] text-amber-800 space-y-0.5">
+                <li>Booking status will update to CANCELLED in database</li>
+                <li>Will no longer count toward mentor daily capacity</li>
+                <li>Will not count in &quot;Total Booked Classes&quot;</li>
+                <li>Booking history and audit trail are preserved</li>
+              </ul>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setBookingToCancel(null)}
+                className="px-4 py-2 text-xs font-semibold text-[#64748B] hover:text-[#172033]"
+              >
+                Keep Booking
+              </button>
+              <button
+                type="button"
+                disabled={cancellingId === bookingToCancel.id}
+                onClick={handleConfirmCancelBooking}
+                className="inline-flex items-center gap-2 bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-98 disabled:opacity-50 cursor-pointer"
+              >
+                {cancellingId === bookingToCancel.id && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                <span>Confirm Cancellation</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mentor Termination Confirmation Modal */}
+      {mentorToTerminate && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="font-mono text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md">
+                  Administrative Action
+                </span>
+                <h3 className="text-lg font-bold text-[#172033] font-serif mt-1">
+                  Terminate Mentor
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMentorToTerminate(null)}
+                className="text-slate-400 hover:text-slate-700 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-2 text-xs bg-[#FAFAF8] p-4 rounded-xl border border-[#E5E7EB]">
+              <div>
+                <span className="text-[#64748B]">Mentor:</span>{' '}
+                <strong className="text-[#172033]">{mentorToTerminate.fullName}</strong>
+              </div>
+              <div>
+                <span className="text-[#64748B]">Email:</span>{' '}
+                <span className="font-mono text-[#172033]">{mentorToTerminate.email}</span>
+              </div>
+              <div>
+                <span className="text-[#64748B]">Timezone:</span>{' '}
+                <span className="font-mono text-[#172033]">{mentorToTerminate.timezone}</span>
+              </div>
+              <div>
+                <span className="text-[#64748B]">Active Appointments:</span>{' '}
+                <span className="text-[#172033] font-bold">{mentorToTerminate.activeAppointmentsCount}</span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-rose-50 border border-rose-200 text-rose-900 rounded-xl text-xs space-y-1">
+              <p className="font-semibold">Termination effects:</p>
+              <ul className="list-disc list-inside text-[11px] text-rose-800 space-y-0.5">
+                <li>Mark mentor as terminated/inactive in database</li>
+                <li>Immediately stop receiving any new bookings</li>
+                <li>Remove from active mentor capacity calculation</li>
+                <li>All historical appointments and records are preserved</li>
+              </ul>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setMentorToTerminate(null)}
+                className="px-4 py-2 text-xs font-semibold text-[#64748B] hover:text-[#172033]"
+              >
+                Keep Active
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmTerminateMentor}
+                className="inline-flex items-center gap-2 bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-98 cursor-pointer"
+              >
+                <span>Confirm Termination</span>
+              </button>
             </div>
           </div>
         </div>

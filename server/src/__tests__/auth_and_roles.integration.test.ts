@@ -387,4 +387,56 @@ describe('Role-Based Access Control & Endpoints Integration', () => {
       expect(summary.totalDailyCapacity).toBe(summary.activeMentorsCount * 2);
     });
   });
+
+  afterAll(async () => {
+    await prisma.notification.deleteMany({
+      where: {
+        appointment: {
+          studentName: { startsWith: 'RBACTest' },
+        },
+      },
+    });
+    await prisma.emailLog.deleteMany({
+      where: {
+        appointment: {
+          studentName: { startsWith: 'RBACTest' },
+        },
+      },
+    });
+    await prisma.trialAttendance.deleteMany({
+      where: {
+        appointment: {
+          studentName: { startsWith: 'RBACTest' },
+        },
+      },
+    });
+    await prisma.appointment.deleteMany({
+      where: {
+        studentName: { startsWith: 'RBACTest' },
+      },
+    });
+
+    if (mentorARecord?.id) {
+      await prisma.mentorAvailability.deleteMany({ where: { mentorId: mentorARecord.id } });
+      await prisma.mentor.deleteMany({ where: { id: mentorARecord.id } });
+    }
+    if (mentorBRecord?.id) {
+      await prisma.mentorAvailability.deleteMany({ where: { mentorId: mentorBRecord.id } });
+      await prisma.mentor.deleteMany({ where: { id: mentorBRecord.id } });
+    }
+
+    await prisma.user.deleteMany({
+      where: {
+        email: {
+          in: [
+            'parentA@rbac.test',
+            'parentB@rbac.test',
+            'mentorA@rbac.test',
+            'mentorB@rbac.test',
+            'admin@rbac.test',
+          ],
+        },
+      },
+    });
+  });
 });

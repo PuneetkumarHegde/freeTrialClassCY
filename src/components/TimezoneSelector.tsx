@@ -103,10 +103,10 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
         aria-haspopup="true"
         aria-expanded={isOpen}
         title={`Current Location / Timezone: ${timezoneDetails.label} (${timezoneDetails.iana})`}
-        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 cursor-pointer ${
           isOpen
-            ? 'bg-blue-50 border-blue-300 text-blue-900 ring-2 ring-blue-100'
-            : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:text-slate-900'
+            ? 'bg-indigo-50 border-indigo-200 text-indigo-950 ring-2 ring-indigo-100'
+            : 'bg-white hover:bg-indigo-50/40 border-slate-200 text-slate-700 hover:text-slate-900'
         } ${variant === 'compact' ? 'py-1 px-2 text-[11px]' : ''}`}
       >
         <span className="flex items-center gap-1.5">
@@ -119,7 +119,7 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
         </span>
         <ChevronDown
           className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
-            isOpen ? 'rotate-180 text-blue-600' : ''
+            isOpen ? 'rotate-180 text-indigo-600' : ''
           }`}
         />
       </button>
@@ -127,15 +127,15 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white shadow-2xl border border-slate-200 z-50 overflow-hidden animate-in fade-in-0 zoom-in-95 origin-top-right"
+          className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white shadow-2xl border border-indigo-100 z-50 overflow-hidden animate-in fade-in-0 zoom-in-95 origin-top-right"
           role="menu"
           aria-orientation="vertical"
         >
           {/* Header & Search */}
-          <div className="p-3 bg-slate-900 text-white">
+          <div className="p-3 bg-indigo-950 text-white">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-blue-400" />
+                <MapPin className="w-4 h-4 text-indigo-300" />
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-200">
                   Select Your Location / Timezone
                 </span>
@@ -143,14 +143,14 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+                className="text-slate-400 hover:text-white p-1 rounded-md transition-colors cursor-pointer"
                 aria-label="Close selector"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-[11px] text-slate-300 mb-2.5">
+            <p className="text-[11px] text-indigo-200 mb-2.5">
               All live trial class schedules and mentor availability automatically adjust to your local time.
             </p>
 
@@ -163,13 +163,13 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search India, London, US Eastern, PT, IST..."
-                className="w-full bg-slate-800 text-white placeholder-slate-400 text-xs rounded-lg pl-9 pr-8 py-2 border border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full bg-slate-900 text-white placeholder-slate-400 text-xs rounded-lg pl-9 pr-8 py-2 border border-slate-700 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -183,10 +183,10 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
                   key={continent}
                   type="button"
                   onClick={() => setSelectedContinent(continent)}
-                  className={`px-2 py-0.5 rounded-full whitespace-nowrap transition-colors ${
+                  className={`px-2 py-0.5 rounded-full whitespace-nowrap transition-colors cursor-pointer ${
                     selectedContinent === continent
-                      ? 'bg-blue-600 text-white font-semibold'
-                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      ? 'bg-indigo-600 text-white font-semibold'
+                      : 'bg-indigo-900/60 text-slate-300 hover:bg-indigo-800'
                   }`}
                 >
                   {continent === 'ALL' ? 'All Regions' : continent}
@@ -209,9 +209,9 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
                     key={tz.iana}
                     type="button"
                     onClick={() => handleSelectTimezone(tz)}
-                    className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left rounded-xl transition-colors ${
+                    className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left rounded-xl transition-colors cursor-pointer ${
                       isSelected
-                        ? 'bg-blue-50 text-blue-900 font-semibold'
+                        ? 'bg-indigo-50 text-indigo-950 font-semibold'
                         : 'hover:bg-slate-50 text-slate-800'
                     }`}
                   >
@@ -230,7 +230,7 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
                     </div>
 
                     {isSelected ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-indigo-100/80 px-2 py-0.5 rounded-full">
                         <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                         Active
                       </span>
@@ -258,7 +258,7 @@ export const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-1 text-blue-700 hover:text-blue-800 font-semibold hover:underline shrink-0"
+                className="inline-flex items-center gap-1 text-indigo-700 hover:text-indigo-800 font-semibold hover:underline shrink-0 cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 Reset to Auto

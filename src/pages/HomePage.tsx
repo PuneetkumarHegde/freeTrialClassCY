@@ -193,7 +193,7 @@ export function HomePage() {
   const handleNextStep = async (e: React.FormEvent) => {
     e.preventDefault();
     setBookingError(null);
-    if (step < 4) {
+    if (step < 3) {
       setStep(step + 1);
     } else {
       if (!selectedSlotData || isSubmittingBooking) {
@@ -498,70 +498,52 @@ export function HomePage() {
     subjects.find((s) => s.id === activeSubjectId) || subjects[0];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-blue-600 selection:text-white relative">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-indigo-600 selection:text-white relative">
       {/* Scroll-Synchronized Horizontal Line (0% to 100%) */}
       <ScrollProgressBar />
 
-      {/* Top Announcement Bar */}
-      <div className="bg-slate-900 text-slate-200 text-xs py-2 px-4 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="font-medium text-slate-100">Fall 2026 Trial Term Open</span>
-            <span className="text-slate-400 hidden sm:inline">
-              · Complimentary 60-Minute 1-on-1 STEM Trial Classes
-            </span>
-          </div>
-          <div className="flex items-center gap-3 text-slate-300">
-            <TimezoneSelector variant="compact" />
-            <span className="hidden md:inline text-slate-600">|</span>
-            <span className="hidden md:inline text-emerald-400 font-medium">
-              100% Free · No Card Required
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navigation */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-100/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
           <a href="#home" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 flex items-center justify-center text-white shadow-md shadow-blue-900/10">
-              <Code2 className="w-5 h-5 text-blue-200 stroke-[2.2]" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-700 via-indigo-800 to-indigo-950 flex items-center justify-center text-white shadow-md shadow-indigo-950/10">
+              <Code2 className="w-5 h-5 text-indigo-200 stroke-[2.2]" />
             </div>
             <div>
-              <span className="text-xl font-bold tracking-tight text-slate-900 font-serif">
+              <span className="text-xl font-bold tracking-tight text-indigo-950 font-serif">
                 Codeyoung
               </span>
-              <span className="block text-[10px] uppercase tracking-wider text-slate-500 font-semibold -mt-1">
+              <span className="block text-[10px] uppercase tracking-wider text-indigo-500 font-semibold -mt-1">
                 Global STEM Academy
               </span>
             </div>
           </a>
 
-          {/* Navigation Links: HOME, TEACHINGS (DROPDOWN), PARENT REVIEWS */}
+          {/* Navigation Links: HOME, TEACHINGS, PARENT REVIEWS */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
             <button
               onClick={handleGoHome}
-              className={`hover:text-blue-700 transition-colors py-2 ${
-                currentTab === 'home' ? 'text-blue-700 font-bold' : ''
+              className={`hover:text-indigo-600 transition-colors py-2 cursor-pointer ${
+                currentTab === 'home' ? 'text-indigo-700 font-bold' : ''
               }`}
             >
               Home
             </button>
 
-            {/* Direct Teachings button without dropdown */}
             <button
               onClick={handleGoTeachings}
-              className={`hover:text-blue-700 transition-colors py-2 ${
-                currentTab === 'teachings' ? 'text-blue-700 font-bold' : ''
+              className={`hover:text-indigo-600 transition-colors py-2 cursor-pointer ${
+                currentTab === 'teachings' ? 'text-indigo-700 font-bold' : ''
               }`}
             >
               Teachings
             </button>
 
-            <button onClick={handleGoReviews} className="hover:text-blue-700 transition-colors py-2">
+            <button
+              onClick={handleGoReviews}
+              className="hover:text-indigo-600 transition-colors py-2 cursor-pointer"
+            >
               Parent Reviews
             </button>
           </nav>
@@ -579,15 +561,15 @@ export function HomePage() {
                     ? '/mentor/dashboard'
                     : '/student/dashboard'
                 }
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-blue-700 bg-slate-100 hover:bg-slate-200/80 px-3.5 py-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-indigo-700 bg-slate-100 hover:bg-indigo-50/80 px-3.5 py-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
               >
-                <UserCheck className="w-3.5 h-3.5 text-blue-700" />
+                <UserCheck className="w-3.5 h-3.5 text-indigo-700" />
                 <span>My Dashboard</span>
               </Link>
             ) : (
               <Link
                 to="/login"
-                className="text-sm font-semibold text-slate-700 hover:text-blue-700 px-3 py-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                className="text-sm font-semibold text-slate-700 hover:text-indigo-700 px-3 py-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
               >
                 Login
               </Link>
@@ -595,7 +577,7 @@ export function HomePage() {
 
             <button
               onClick={handleOpenBooking}
-              className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm shadow-blue-700/20 transition-all transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm shadow-indigo-600/20 transition-all transform hover:-translate-y-0.5 cursor-pointer"
             >
               <span>Book Free Trial</span>
               <ArrowRight className="w-4 h-4" />
@@ -611,156 +593,128 @@ export function HomePage() {
             {/* HERO / HOME SECTION (#home) */}
             <section
               id="home"
-              className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-slate-200 bg-gradient-to-b from-white via-slate-50 to-slate-100/60"
+              className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-indigo-100/60 bg-gradient-to-b from-white via-indigo-50/30 to-slate-50/60"
             >
-          {/* Subtle background ambient grid */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-40 pointer-events-none" />
+              {/* Subtle background ambient grid */}
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#e0e7ff_1px,transparent_1px),linear-gradient(to_bottom,#e0e7ff_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-35 pointer-events-none" />
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-              {/* Left Column: Core Value Proposition, Google Ratings & High-Converting CTA */}
-              <div className="lg:col-span-7 space-y-6">
-                {/* Dynamic Rotating Brand Inspiration Quote */}
-                <div className="flex justify-start">
-                  <DynamicQuoteBanner />
-                </div>
-
-                {/* Google Ratings & Verified Badge */}
-                <div className="inline-flex items-center gap-3 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-xs">
-                  <div className="flex items-center gap-1">
-                    {/* Google 'G' Icon Colors */}
-                    <div className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[9px]">
-                      G
+              <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                  {/* Left Column: Core Value Proposition, Google Ratings & High-Converting CTA */}
+                  <div className="lg:col-span-7 space-y-6">
+                    {/* Dynamic Rotating Brand Inspiration Quote */}
+                    <div className="flex justify-start">
+                      <DynamicQuoteBanner />
                     </div>
-                    <div className="flex items-center gap-0.5 text-amber-500 ml-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      ))}
+
+                    {/* Google Ratings & Verified Badge */}
+                    <div className="inline-flex items-center gap-3 bg-white px-3.5 py-1.5 rounded-full border border-indigo-100 shadow-xs">
+                      <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-[9px]">
+                          G
+                        </div>
+                        <div className="flex items-center gap-0.5 text-amber-500 ml-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                          ))}
+                        </div>
+                      </div>
+                      <span className="text-xs font-bold text-slate-800">4.9 / 5.0 Google Rating</span>
+                      <span className="text-slate-300">·</span>
+                      <span className="text-xs text-slate-500 font-medium">15,000+ Verified Students</span>
                     </div>
-                  </div>
-                  <span className="text-xs font-bold text-slate-800">4.9 / 5.0 Google Rating</span>
-                  <span className="text-slate-300">·</span>
-                  <span className="text-xs text-slate-500 font-medium">15,000+ Verified Students</span>
-                </div>
 
-                {/* Primary Headline */}
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.12]">
-                  Book a Free 1-on-1 Trial Class with <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900">
-                    Codeyoung.
-                  </span>
-                </h1>
-
-                {/* Subheadline & What is Codeyoung */}
-                <p className="text-lg sm:text-xl text-slate-600 leading-relaxed font-normal max-w-2xl">
-                  <strong>Codeyoung</strong> is a globally accredited STEM academy providing live, 1-on-1 coding and logic education for children ages 5–17. In your free 60-minute trial session, your child pairs live with an expert instructor and builds a genuine playable project.
-                </p>
-
-                {/* Primary Call to Action Button */}
-                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                  <button
-                    onClick={handleOpenBooking}
-                    className="inline-flex items-center justify-center gap-3 bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-blue-700/25 transition-all transform hover:-translate-y-0.5 focus:ring-4 focus:ring-blue-200"
-                  >
-                    <span>Book a Free Trial Class</span>
-                    <ArrowRight className="w-5 h-5 text-blue-200" />
-                  </button>
-
-                  <button
-                    onClick={handleGoTeachings}
-                    className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-base px-6 py-4 rounded-xl shadow-sm transition-colors"
-                  >
-                    <span>Explore Teachings & Courses</span>
-                    <ArrowRight className="w-4 h-4 text-slate-400" />
-                  </button>
-                </div>
-
-                {/* Friction-Free Indicators */}
-                <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-600 border-t border-slate-200/80">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="font-medium text-slate-700">100% Free Trial</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-blue-600 shrink-0" />
-                    <span className="font-medium text-slate-700">60-Min 1-on-1 Class</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
-                    <span className="font-medium text-slate-700">No Credit Card</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Video className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span className="font-medium text-slate-700">Live Meeting Link</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Interactive Quick Booking Box */}
-              <div className="lg:col-span-5">
-                <div className="relative bg-white rounded-2xl border-2 border-blue-600/30 shadow-2xl shadow-slate-300/60 overflow-hidden">
-                  {/* Card Header */}
-                  <div className="p-6 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
-                    <div>
-                      <span className="text-xs uppercase font-mono tracking-wider text-blue-400 font-semibold block">
-                        Instant 1-on-1 Booking
+                    {/* Primary Headline */}
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.12]">
+                      Book a Free 1-on-1 Trial Class with <br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-indigo-600 to-purple-800">
+                        Codeyoung.
                       </span>
-                      <h3 className="text-lg font-bold text-white mt-0.5">Reserve Free Trial Slot</h3>
-                    </div>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium border border-emerald-500/30">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                      Open Today
-                    </span>
-                  </div>
+                    </h1>
 
-                  {/* Card Body */}
-                  <div className="p-6 space-y-4">
-                    {/* Timezone badge */}
-                    <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Globe className="w-4 h-4 text-blue-600" />
-                        <span className="text-slate-600">Your Timezone:</span>
-                      </div>
-                      <span className="font-mono font-bold text-blue-700 bg-blue-100/60 px-2 py-0.5 rounded">
-                        {timezone}
-                      </span>
-                    </div>
-
-                    <div className="space-y-2 text-xs text-slate-600">
-                      <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-                        <span className="font-medium">Class Format:</span>
-                        <span className="font-semibold text-slate-800">Live 1-on-1 Private Session</span>
-                      </div>
-                      <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-                        <span className="font-medium">Duration:</span>
-                        <span className="font-semibold text-slate-800">60 Minutes (Live Code Project)</span>
-                      </div>
-                      <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-                        <span className="font-medium">Trial Cost:</span>
-                        <span className="font-bold text-emerald-600">$0.00 (No Card Needed)</span>
-                      </div>
-                      <div className="flex items-center justify-between py-1.5">
-                        <span className="font-medium">Accreditation:</span>
-                        <span className="font-semibold text-slate-800">STEM.org Certified Academy</span>
-                      </div>
-                    </div>
-
-                    {/* Quick Booking Button */}
-                    <button
-                      onClick={handleOpenBooking}
-                      className="w-full py-4 px-4 rounded-xl bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-700/20"
-                    >
-                      <Calendar className="w-4 h-4 text-blue-200" />
-                      <span>Book Free Trial (Select Date & Time)</span>
-                    </button>
-
-                    <p className="text-[11px] text-center text-slate-500">
-                      ⚡ Instructors personalize each lesson for your child's age & skill level.
+                    {/* Subheadline & What is Codeyoung */}
+                    <p className="text-lg sm:text-xl text-slate-600 leading-relaxed font-normal max-w-2xl">
+                      <strong>Codeyoung</strong> is a globally accredited STEM academy providing live, 1-on-1 coding and logic education for children ages 5–17. In your free 60-minute trial session, your child pairs live with an expert instructor and builds a genuine playable project.
                     </p>
+
+                    {/* Primary Call to Action Button */}
+                    <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                      <button
+                        onClick={handleOpenBooking}
+                        className="inline-flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-indigo-600/25 transition-all transform hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-200 cursor-pointer"
+                      >
+                        <span>Book a Free Trial Class</span>
+                        <ArrowRight className="w-5 h-5 text-indigo-200" />
+                      </button>
+
+                      <button
+                        onClick={handleGoTeachings}
+                        className="inline-flex items-center justify-center gap-2 bg-white hover:bg-indigo-50/50 border border-indigo-200 text-slate-700 font-semibold text-base px-6 py-4 rounded-xl shadow-sm transition-colors cursor-pointer"
+                      >
+                        <span>Explore Teachings & Courses</span>
+                        <ArrowRight className="w-4 h-4 text-slate-400" />
+                      </button>
+                    </div>
+
+                    {/* Friction-Free Indicators */}
+                    <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-600 border-t border-slate-200/80">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span className="font-medium text-slate-700">100% Free Trial</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-indigo-600 shrink-0" />
+                        <span className="font-medium text-slate-700">60-Min 1-on-1 Class</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="w-4 h-4 text-purple-600 shrink-0" />
+                        <span className="font-medium text-slate-700">No Credit Card</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Video className="w-4 h-4 text-amber-600 shrink-0" />
+                        <span className="font-medium text-slate-700">Live Meeting Link</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Hero Visual - Friendly Girl Learning on Laptop */}
+                  <div className="lg:col-span-5">
+                    <div className="relative bg-white rounded-3xl border border-indigo-100 shadow-xl shadow-indigo-950/5 p-4 sm:p-5 overflow-hidden">
+                      {/* Visual Asset Container */}
+                      <div className="relative overflow-hidden rounded-2xl bg-indigo-50/50 aspect-[4/3] border border-indigo-100/60">
+                        <img
+                          src="/girl-learning-laptop.svg"
+                          alt="Professional, friendly young girl smiling and engaged while learning coding on a modern laptop with Codeyoung instructor"
+                          className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+
+                      {/* Trust Reassurance & Quick Booking Bar */}
+                      <div className="mt-4 pt-3.5 border-t border-indigo-50/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>1-on-1 Live Private Class</span>
+                            <span className="text-slate-300">·</span>
+                            <span className="text-indigo-600 font-semibold">STEM.org Certified</span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 mt-0.5">
+                            Interactive coding project tailored for ages 5–17
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={handleOpenBooking}
+                          className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm shadow-indigo-600/20 transition-all shrink-0 cursor-pointer"
+                        >
+                          <Calendar className="w-3.5 h-3.5 text-indigo-200" />
+                          <span>Select Time Slot</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
             {/* WHAT IS CODEYOUNG SECTION */}
             <div id="what-is-codeyoung" className="mt-20 pt-16 border-t border-slate-200/90">
@@ -825,8 +779,8 @@ export function HomePage() {
 
                 {/* 6 Core Advantages Grid */}
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-400 hover:shadow-md transition-all">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center mb-4">
+                  <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:border-indigo-400 hover:shadow-md transition-all">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center mb-4">
                       <Users className="w-5 h-5" />
                     </div>
                     <h3 className="text-base font-bold text-slate-900 mb-2">1-on-1 Dedicated Attention</h3>
@@ -892,8 +846,8 @@ export function HomePage() {
             <div id="testimonials" className="mt-20 pt-16 border-t border-slate-200/90">
               <div className="text-center max-w-3xl mx-auto mb-12">
                 {/* Google Ratings Badge */}
-                <div className="inline-flex items-center gap-2.5 bg-white px-4 py-1.5 rounded-full border border-slate-200 shadow-xs mb-3">
-                  <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[10px]">
+                <div className="inline-flex items-center gap-2.5 bg-white px-4 py-1.5 rounded-full border border-indigo-100 shadow-xs mb-3">
+                  <div className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px]">
                     G
                   </div>
                   <div className="flex items-center gap-1 text-amber-400">
@@ -1037,7 +991,7 @@ export function HomePage() {
                 </div>
                 <button
                   onClick={handleOpenBooking}
-                  className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition-all shadow-md shrink-0 flex items-center gap-2"
+                  className="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition-all shadow-md shadow-indigo-600/20 shrink-0 flex items-center gap-2 cursor-pointer"
                 >
                   <span>Book Free 1-on-1 Trial</span>
                   <ArrowRight className="w-4 h-4" />
@@ -1050,11 +1004,11 @@ export function HomePage() {
     )}
 
     {currentTab === 'teachings' && (
-      <section id="teachings" className="py-16 sm:py-20 bg-slate-50 min-h-[85vh] border-b border-slate-200">
+      <section id="teachings" className="py-16 sm:py-20 bg-slate-50 min-h-[85vh] border-b border-indigo-100/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="max-w-5xl mx-auto mb-10 text-center">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3.5 py-1.5 rounded-full border border-blue-100">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100">
               Codeyoung STEM Academy · All Available Courses
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mt-4 tracking-tight">
@@ -1063,14 +1017,14 @@ export function HomePage() {
           </div>
 
           {/* 1. Short 5-Line Intro Box */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs max-w-5xl mx-auto mb-10">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700 mb-4 pb-3 border-b border-slate-100">
-              <Sparkles className="w-4 h-4 text-blue-600" />
+          <div className="bg-white rounded-2xl border border-indigo-100/90 p-6 sm:p-8 shadow-xs max-w-5xl mx-auto mb-10">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-700 mb-4 pb-3 border-b border-slate-100">
+              <Sparkles className="w-4 h-4 text-indigo-600" />
               <span>Teaching Philosophy & Academy Overview</span>
             </div>
             <div className="space-y-3 text-slate-700 text-sm sm:text-base leading-relaxed">
               <p className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   1
                 </span>
                 <span>
@@ -1078,7 +1032,7 @@ export function HomePage() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   2
                 </span>
                 <span>
@@ -1086,7 +1040,7 @@ export function HomePage() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   3
                 </span>
                 <span>
@@ -1094,7 +1048,7 @@ export function HomePage() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   4
                 </span>
                 <span>
@@ -1102,7 +1056,7 @@ export function HomePage() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                   5
                 </span>
                 <span>
@@ -1113,16 +1067,16 @@ export function HomePage() {
           </div>
 
           {/* 2. Large High-Converting Free Trial Booking Box */}
-          <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white rounded-3xl p-8 sm:p-12 shadow-2xl border-2 border-blue-500/30 max-w-5xl mx-auto mb-14 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-indigo-900 text-white rounded-3xl p-8 sm:p-12 shadow-2xl border-2 border-indigo-500/30 max-w-5xl mx-auto mb-14 relative overflow-hidden">
             {/* Background ambient accents */}
-            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-8 border-b border-slate-800">
                 <div className="space-y-3 max-w-2xl">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-400/30">
-                    <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-400/30">
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                     <span>COMPLIMENTARY 60-MINUTE 1-ON-1 TRIAL SESSION</span>
                   </div>
                   <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
@@ -1136,7 +1090,7 @@ export function HomePage() {
                 <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
                   <button
                     onClick={handleOpenBooking}
-                    className="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-extrabold text-base px-8 py-4 rounded-xl shadow-xl shadow-blue-600/40 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-3 cursor-pointer"
+                    className="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-extrabold text-base px-8 py-4 rounded-xl shadow-xl shadow-indigo-600/40 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-3 cursor-pointer"
                   >
                     <span>Book Free 1-on-1 Trial</span>
                     <ArrowRight className="w-5 h-5" />
@@ -1473,7 +1427,7 @@ export function HomePage() {
           <div className="mt-14 max-w-5xl mx-auto rounded-3xl bg-slate-900 text-white p-8 sm:p-12 border border-slate-800 shadow-xl">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800">
               <div>
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 mb-2">
+                <div className="inline-flex items-center gap-2 text-xs font-bold text-indigo-400 mb-2">
                   <Sparkles className="w-4 h-4" />
                   <span>ZERO-COMMITMENT 1-ON-1 TRIAL · COMPLIMENTARY 60 MINUTES</span>
                 </div>
@@ -1487,7 +1441,7 @@ export function HomePage() {
 
               <button
                 onClick={handleOpenBooking}
-                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm px-8 py-4 rounded-xl transition-all shadow-lg shadow-blue-600/30 shrink-0 flex items-center justify-center gap-2 cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm px-8 py-4 rounded-xl transition-all shadow-lg shadow-indigo-600/30 shrink-0 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Book Free Trial Now</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1524,43 +1478,39 @@ export function HomePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden my-8">
             {/* Modal Header */}
-            <div className="px-6 py-5 bg-slate-900 text-white flex items-center justify-between">
+            <div className="px-6 py-5 bg-indigo-950 text-white flex items-center justify-between">
               <div>
-                <span className="text-xs uppercase font-mono tracking-wider text-blue-400 font-semibold">
+                <span className="text-xs uppercase font-mono tracking-wider text-indigo-300 font-semibold">
                   Free 1-on-1 Trial Class
                 </span>
                 <h3 className="text-lg font-bold text-white">
                   {isBooked
                     ? 'Trial Class Confirmed!'
-                    : `Step ${step} of 4: ${
+                    : `Step ${step} of 3: ${
                         step === 1
                           ? 'Student Details'
                           : step === 2
                           ? 'Parent Details'
-                          : step === 3
-                          ? 'Timezone & Date'
-                          : 'Confirm Class'
+                          : 'Schedule (Timezone & Slot)'
                       }`}
                 </h3>
               </div>
               <button
                 onClick={() => setIsBookingOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-indigo-900 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Stepper Progress */}
+            {/* Stepper Progress - Exactly 3 Steps */}
             {!isBooked && (
-              <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between text-xs font-semibold text-slate-600">
-                <span className={step >= 1 ? 'text-blue-700' : ''}>1. Student</span>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className={step >= 2 ? 'text-blue-700' : ''}>2. Parent</span>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className={step >= 3 ? 'text-blue-700' : ''}>3. Timezone</span>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className={step >= 4 ? 'text-blue-700' : ''}>4. Slot</span>
+              <div className="bg-indigo-50/60 px-6 py-3 border-b border-indigo-100 flex items-center justify-between text-xs font-semibold text-slate-600">
+                <span className={step >= 1 ? 'text-indigo-700 font-bold' : ''}>1. Student</span>
+                <ChevronRight className="w-3.5 h-3.5 text-indigo-300" />
+                <span className={step >= 2 ? 'text-indigo-700 font-bold' : ''}>2. Parent</span>
+                <ChevronRight className="w-3.5 h-3.5 text-indigo-300" />
+                <span className={step >= 3 ? 'text-indigo-700 font-bold' : ''}>3. Schedule</span>
               </div>
             )}
 
@@ -1583,17 +1533,17 @@ export function HomePage() {
                     .
                   </p>
 
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-left text-xs space-y-2 mt-4 font-mono">
+                  <div className="bg-indigo-50/60 p-4 rounded-xl border border-indigo-100 text-left text-xs space-y-2 mt-4 font-mono text-slate-800">
                     <div>
                       <strong>Booking Reference:</strong>{' '}
-                      <span className="text-blue-700 font-bold">{confirmedBooking?.bookingId || 'BK-1024'}</span>
+                      <span className="text-indigo-700 font-bold">{confirmedBooking?.bookingId || 'BK-1024'}</span>
                     </div>
                     <div>
                       <strong>Subject:</strong> {confirmedBooking?.student.subject || subject}
                     </div>
                     <div>
                       <strong>Meeting Link:</strong>{' '}
-                      <span className="text-blue-600 break-all">
+                      <span className="text-indigo-600 break-all font-semibold">
                         {confirmedBooking?.meetingLink || 'https://demo.codeyoung.com/class/BK-1024'}
                       </span>
                     </div>
@@ -1607,7 +1557,7 @@ export function HomePage() {
 
                   <button
                     onClick={() => setIsBookingOpen(false)}
-                    className="mt-6 w-full py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-semibold text-sm transition-colors"
+                    className="mt-6 w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-xl font-semibold text-sm transition-colors cursor-pointer"
                   >
                     Done
                   </button>
@@ -1626,7 +1576,7 @@ export function HomePage() {
                           value={studentName}
                           onChange={(e) => setStudentName(e.target.value)}
                           placeholder="e.g. Leo Parker"
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-600 focus:outline-none"
                         />
                       </div>
 
@@ -1637,7 +1587,7 @@ export function HomePage() {
                         <select
                           value={studentGrade}
                           onChange={(e) => setStudentGrade(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-600 focus:outline-none bg-white"
                         >
                           <option>Grade 1 - 3 (Ages 6-8)</option>
                           <option>Grade 4 - 5 (Ages 9-10)</option>
@@ -1653,7 +1603,7 @@ export function HomePage() {
                         <select
                           value={subject}
                           onChange={(e) => setSubject(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-600 focus:outline-none bg-white"
                         >
                           <option>Scratch & Creative Coding</option>
                           <option>Python & Game Architecture</option>
@@ -1673,7 +1623,7 @@ export function HomePage() {
                           value={learningGoal}
                           onChange={(e) => setLearningGoal(e.target.value)}
                           placeholder="e.g. Wants to build games like Minecraft or Roblox"
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-600 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -1691,7 +1641,7 @@ export function HomePage() {
                           value={parentName}
                           onChange={(e) => setParentName(e.target.value)}
                           placeholder="e.g. Sarah Parker"
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-600 focus:outline-none"
                         />
                       </div>
 
@@ -1705,7 +1655,7 @@ export function HomePage() {
                           value={parentEmail}
                           onChange={(e) => setParentEmail(e.target.value)}
                           placeholder="e.g. sarah.parker@example.com"
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-600 focus:outline-none"
                         />
                         <p className="text-[11px] text-slate-500 mt-1">
                           Class joining link and calendar invite will be sent to this email.
@@ -1716,51 +1666,48 @@ export function HomePage() {
 
                   {step === 3 && (
                     <div className="space-y-4">
-                      <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                          Parent Location / Timezone
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <TimezoneSelector variant="header" className="w-full" />
+                      {/* Integrated Timezone & Date Row */}
+                      <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex-1">
+                            <label className="block text-xs font-bold uppercase tracking-wider text-indigo-950 mb-1">
+                              Parent Timezone
+                            </label>
+                            <TimezoneSelector variant="header" className="w-full" />
+                          </div>
+
+                          <div className="sm:w-48">
+                            <label className="block text-xs font-bold uppercase tracking-wider text-indigo-950 mb-1">
+                              Trial Date
+                            </label>
+                            <input
+                              type="date"
+                              value={selectedDate}
+                              onChange={(e) => setSelectedDate(e.target.value)}
+                              className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-indigo-600 focus:outline-none bg-white text-slate-800 cursor-pointer"
+                            />
+                          </div>
                         </div>
-                        <p className="text-[11px] text-slate-500 mt-1.5">
-                          Currently set to <strong>{timezoneDetails.label}</strong> ({timezone}). Live trial class slots will be scheduled in your local time.
+
+                        <p className="text-[11px] text-slate-600">
+                          Times automatically adjust to <strong>{timezoneDetails.label}</strong> ({timezone}). Select your preferred 60-minute session below.
                         </p>
                       </div>
 
+                      {/* Available Slots Grid */}
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                          Select Date
-                        </label>
-                        <input
-                          type="date"
-                          value={selectedDate}
-                          onChange={(e) => setSelectedDate(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none bg-white"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {step === 4 && (
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex items-center justify-between gap-2 mb-2">
-                          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                            Available 60-Minute Slots on {selectedDate} ({timezoneDetails.shortName})
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
+                            Available 60-Min Slots on {selectedDate}
                           </label>
-                          <input
-                            type="date"
-                            value={selectedDate}
-                            onChange={(e) => setSelectedDate(e.target.value)}
-                            className="text-xs px-2 py-1 rounded-md border border-slate-300 focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white font-medium text-slate-700 cursor-pointer"
-                            title="Change selected date"
-                          />
+                          <span className="text-[11px] font-medium text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
+                            {timezoneDetails.shortName} Local Time
+                          </span>
                         </div>
 
                         {isLoadingSlots ? (
-                          <div className="py-12 flex flex-col items-center justify-center text-slate-500 space-y-2.5 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
-                            <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                          <div className="py-10 flex flex-col items-center justify-center text-slate-500 space-y-2.5 border border-dashed border-indigo-200 rounded-xl bg-indigo-50/30">
+                            <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
                             <p className="text-xs font-medium text-slate-600">
                               Finding available trial times...
                             </p>
@@ -1781,19 +1728,19 @@ export function HomePage() {
                           <div className="p-6 text-center bg-slate-50 border border-slate-200 rounded-xl space-y-3">
                             <Calendar className="w-8 h-8 text-slate-400 mx-auto" />
                             <p className="text-xs text-slate-600 font-medium max-w-sm mx-auto">
-                              No trial times available for this date. Let&apos;s find another time.
+                              No trial times available for this date. Let&apos;s select another date.
                             </p>
                             <div className="flex justify-center pt-1">
                               <input
                                 type="date"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                className="px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-blue-600 focus:outline-none bg-white font-medium cursor-pointer"
+                                className="px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-indigo-600 focus:outline-none bg-white font-medium cursor-pointer"
                               />
                             </div>
                           </div>
                         ) : (
-                          <div className="grid grid-cols-2 gap-2 text-xs max-h-72 overflow-y-auto pr-0.5">
+                          <div className="grid grid-cols-2 gap-2 text-xs max-h-60 overflow-y-auto pr-0.5">
                             {slots.map((slot) => {
                               const formatted = formatSlotRange(slot.startTime, slot.endTime, timezone);
                               const isSelected = selectedSlotData?.startTime === slot.startTime;
@@ -1816,12 +1763,12 @@ export function HomePage() {
                                       setSelectedSlot(formatted);
                                     }
                                   }}
-                                  className={`p-3 rounded-lg border text-left font-medium transition-all ${
+                                  className={`p-3 rounded-xl border text-left font-medium transition-all ${
                                     isFull
                                       ? 'border-slate-200 bg-slate-50/70 text-slate-400 cursor-not-allowed opacity-60'
                                       : isSelected
-                                      ? 'border-blue-600 bg-blue-50 text-blue-900 font-bold ring-2 ring-blue-600/20'
-                                      : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 cursor-pointer'
+                                      ? 'border-indigo-600 bg-indigo-50/80 text-indigo-950 font-bold ring-2 ring-indigo-600/20 shadow-xs'
+                                      : 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/20 text-slate-700 cursor-pointer'
                                   }`}
                                 >
                                   <div className="flex items-center justify-between">
@@ -1835,12 +1782,12 @@ export function HomePage() {
                                     </div>
                                   ) : isLimited ? (
                                     <div className="text-[10px] text-amber-600 font-medium mt-0.5">
-                                      ● Limited availability ({slot.availableMentors}{' '}
+                                      ● Limited ({slot.availableMentors}{' '}
                                       {slot.availableMentors === 1 ? 'spot' : 'spots'} left)
                                     </div>
                                   ) : (
-                                    <div className="text-[10px] text-emerald-600 mt-0.5">
-                                      ● Free 1-on-1 trial slot available
+                                    <div className="text-[10px] text-emerald-600 font-medium mt-0.5">
+                                      ● 1-on-1 trial slot available
                                     </div>
                                   )}
                                 </button>
@@ -1850,22 +1797,28 @@ export function HomePage() {
                         )}
                       </div>
 
-                      <div className="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-xs space-y-1">
-                        <div>
-                          <strong>Student:</strong> {studentName || 'Not specified'} ({studentGrade})
+                      {/* Summary Review */}
+                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Student:</span>
+                          <span className="font-semibold text-slate-800">{studentName || 'Not specified'} ({studentGrade})</span>
                         </div>
-                        <div>
-                          <strong>Parent:</strong> {parentName || 'Not specified'} (
-                          {parentEmail || 'Not specified'})
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Parent:</span>
+                          <span className="font-semibold text-slate-800">{parentName || 'Not specified'} ({parentEmail || 'Not specified'})</span>
                         </div>
-                        <div>
-                          <strong>Subject:</strong> {subject}
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Subject:</span>
+                          <span className="font-semibold text-indigo-700">{subject}</span>
                         </div>
-                        {selectedSlotData && (
-                          <div>
-                            <strong>Selected Slot:</strong> {selectedSlotData.formattedTime} ({selectedSlotData.timezone})
-                          </div>
-                        )}
+                        <div className="flex justify-between pt-1 border-t border-slate-200">
+                          <span className="text-slate-500">Selected Slot:</span>
+                          <span className="font-bold text-indigo-900">
+                            {selectedSlotData
+                              ? `${selectedSlotData.formattedTime} (${selectedSlotData.timezone})`
+                              : 'None selected yet'}
+                          </span>
+                        </div>
                       </div>
 
                       {bookingError && (
@@ -1892,15 +1845,15 @@ export function HomePage() {
 
                     <button
                       type="submit"
-                      disabled={step === 4 && (!selectedSlotData || isLoadingSlots || isSubmittingBooking)}
-                      className={`font-semibold text-xs px-6 py-2.5 rounded-lg shadow-sm transition-colors flex items-center gap-1.5 ${
-                        step === 4 && (!selectedSlotData || isLoadingSlots || isSubmittingBooking)
+                      disabled={step === 3 && (!selectedSlotData || isLoadingSlots || isSubmittingBooking)}
+                      className={`font-semibold text-xs px-6 py-2.5 rounded-xl shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer ${
+                        step === 3 && (!selectedSlotData || isLoadingSlots || isSubmittingBooking)
                           ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                          : 'bg-blue-700 hover:bg-blue-800 text-white cursor-pointer'
+                          : 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white'
                       }`}
                     >
                       {isSubmittingBooking && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                      <span>{step === 4 ? (isSubmittingBooking ? 'Confirming...' : 'Confirm Free Trial') : 'Continue'}</span>
+                      <span>{step === 3 ? (isSubmittingBooking ? 'Confirming...' : 'Confirm Free Trial') : 'Continue'}</span>
                       {!isSubmittingBooking && <ArrowRight className="w-3.5 h-3.5" />}
                     </button>
                   </div>
@@ -1930,7 +1883,7 @@ export function HomePage() {
             </button>
             <button
               onClick={handleOpenBooking}
-              className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+              className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors cursor-pointer"
             >
               Book Free Trial
             </button>

@@ -272,6 +272,7 @@ export async function fetchAdminAppointments(params?: {
   limit?: number;
   status?: string;
   date?: string;
+  sortOrder?: 'asc' | 'desc';
 }): Promise<{
   pagination: { page: number; limit: number; total: number; totalPages: number };
   items: AdminAppointmentItem[];
@@ -281,6 +282,7 @@ export async function fetchAdminAppointments(params?: {
   if (params?.limit) q.set('limit', String(params.limit));
   if (params?.status) q.set('status', params.status);
   if (params?.date) q.set('date', params.date);
+  if (params?.sortOrder) q.set('sortOrder', params.sortOrder);
 
   const res = await fetch(`/api/admin/appointments?${q.toString()}`, { headers: getAuthHeaders() });
   const json = await res.json();

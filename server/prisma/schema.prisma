@@ -49,6 +49,12 @@ enum NotificationType {
   EMAIL_FAILED
 }
 
+enum UnavailabilityStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id           String   @id @default(uuid())
   fullName     String
@@ -98,18 +104,20 @@ model MentorAvailability {
 }
 
 model MentorUnavailability {
-  id        String   @id @default(uuid())
+  id        String               @id @default(uuid())
   mentorId  String
-  startDate DateTime @db.Timestamptz(3)
-  endDate   DateTime @db.Timestamptz(3)
+  startDate DateTime             @db.Timestamptz(3)
+  endDate   DateTime             @db.Timestamptz(3)
   reason    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status    UnavailabilityStatus @default(PENDING)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
 
   mentor Mentor @relation(fields: [mentorId], references: [id], onDelete: Cascade)
 
   @@index([mentorId])
   @@index([startDate, endDate])
+  @@index([status])
 }
 
 model Appointment {

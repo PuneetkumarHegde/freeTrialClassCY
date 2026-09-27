@@ -529,7 +529,7 @@ export class AdminService {
    * Paginated appointments listing for Admin (sorted earliest first)
    */
   async getAdminAppointments(query: AdminAppointmentsQuery) {
-    const { page, limit, status, date } = query;
+    const { page, limit, status, date, sortOrder = 'asc' } = query;
     const skip = (page - 1) * limit;
 
     const where: Prisma.AppointmentWhereInput = {};
@@ -553,7 +553,7 @@ export class AdminService {
         where,
         skip,
         take: limit,
-        orderBy: { startTime: 'asc' },
+        orderBy: { startTime: sortOrder === 'desc' ? 'desc' : 'asc' },
         include: {
           parent: {
             select: {
@@ -821,7 +821,7 @@ export class AdminService {
       data: { status: AttendanceStatus.CANCELLED },
     });
 
-    // Notify Admin of cancellation
+    // Notify Admin and Mentor of cancellation
     try {
       await notificationService.createAdminNotification({
         type: 'TRIAL_CANCELLED',
@@ -829,6 +829,18 @@ export class AdminService {
         message: `Booking BK-${id.substring(0, 6).toUpperCase()} for ${appointment.studentName} was cancelled by Admin.`,
         appointmentId: id,
       });
+
+      if (appointment.mentor?.userId) {
+        await prisma.notification.create({
+          data: {
+            type: 'TRIAL_CANCELLED',
+            recipientUserId: appointment.mentor.userId,
+            title: 'Trial Booking Cancelled',
+            message: `Trial session BK-${id.substring(0, 6).toUpperCase()} for ${appointment.studentName} was cancelled by Admin. Slot capacity has been freed up.`,
+            appointmentId: id,
+          },
+        });
+      }
     } catch (err) {
       console.error('Failed to create TRIAL_CANCELLED notification:', err);
     }

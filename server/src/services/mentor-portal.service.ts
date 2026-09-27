@@ -331,7 +331,7 @@ export class MentorPortalService {
         const formatSlotTime = (h: number, m: number) => {
           const ampm = h >= 12 ? 'PM' : 'AM';
           const hr = h % 12 || 12;
-          return `${String(hr).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+          return `${hr}:${String(m).padStart(2, '0')} ${ampm}`;
         };
 
         const localStartFormatted = formatSlotTime(currentHour, currentMinute);

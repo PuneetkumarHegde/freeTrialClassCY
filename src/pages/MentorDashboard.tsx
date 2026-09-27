@@ -167,12 +167,12 @@ export const MentorDashboard: React.FC = () => {
     }
   };
 
-  const formatLocalTime = (isoString: string, tz: string) => {
+  const formatLocalTime = (isoString: string, tz?: string) => {
     try {
       const d = new Date(isoString);
       return d.toLocaleTimeString('en-US', {
-        timeZone: tz,
-        hour: '2-digit',
+        timeZone: tz || 'Asia/Kolkata',
+        hour: 'numeric',
         minute: '2-digit',
         hour12: true,
       });
@@ -181,11 +181,33 @@ export const MentorDashboard: React.FC = () => {
     }
   };
 
-  const formatLocalDate = (isoString: string, tz: string) => {
+  const format12Hour = (timeStr: string) => {
+    if (!timeStr) return '';
+    // If already in 12-hour format e.g. "2:00 PM" or "02:00 PM"
+    const match12 = timeStr.trim().match(/^(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)$/i);
+    if (match12) {
+      const h = parseInt(match12[1], 10);
+      const m = match12[2];
+      const period = match12[3].toUpperCase();
+      return `${h}:${m} ${period}`;
+    }
+    // 24-hour format e.g. "14:00" or "09:30"
+    const match24 = timeStr.trim().match(/^(\d{1,2}):(\d{2})/);
+    if (match24) {
+      const hour = parseInt(match24[1], 10);
+      const minute = match24[2];
+      const period = hour >= 12 ? 'PM' : 'AM';
+      const h12 = hour % 12 === 0 ? 12 : hour % 12;
+      return `${h12}:${minute} ${period}`;
+    }
+    return timeStr;
+  };
+
+  const formatLocalDate = (isoString: string, tz?: string) => {
     try {
       const d = new Date(isoString);
       return d.toLocaleDateString('en-US', {
-        timeZone: tz,
+        timeZone: tz || 'Asia/Kolkata',
         month: 'short',
         day: 'numeric',
         year: 'numeric',
@@ -450,7 +472,7 @@ export const MentorDashboard: React.FC = () => {
                           >
                             <span className="font-semibold text-[#172033]">{DAYS[rule.dayOfWeek]}</span>
                             <span className="font-mono text-[#4F6B8A]">
-                              {rule.localStart} – {rule.localEnd}
+                              {format12Hour(rule.localStart)} – {format12Hour(rule.localEnd)}
                             </span>
                           </div>
                         ))
@@ -529,7 +551,7 @@ export const MentorDashboard: React.FC = () => {
                             >
                               <div className="flex items-center justify-between font-mono text-xs font-bold">
                                 <span>
-                                  {slot.localStart} – {slot.localEnd}
+                                  {format12Hour(slot.localStart)} – {format12Hour(slot.localEnd)}
                                 </span>
                                 <span
                                   className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
@@ -697,7 +719,9 @@ export const MentorDashboard: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-bold text-[#334155] block">Start Time (24h)</label>
+                  <label className="font-bold text-[#334155] block">
+                    Start Time ({format12Hour(reqStartTime)})
+                  </label>
                   <input
                     type="time"
                     required
@@ -707,7 +731,9 @@ export const MentorDashboard: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-bold text-[#334155] block">End Time (24h)</label>
+                  <label className="font-bold text-[#334155] block">
+                    End Time ({format12Hour(reqEndTime)})
+                  </label>
                   <input
                     type="time"
                     required

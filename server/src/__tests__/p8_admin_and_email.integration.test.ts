@@ -25,6 +25,25 @@ describe('Phase P8: Admin Operations, Email Logs & Notifications Integration', (
         timezone: 'Asia/Kolkata',
       },
     });
+
+    // Clean up any leftovers from previous test runs
+    await prisma.notification.deleteMany({ where: { appointment: { studentName: 'Meera Kapoor' } } });
+    await prisma.emailLog.deleteMany({ where: { appointment: { studentName: 'Meera Kapoor' } } });
+    await prisma.trialAttendance.deleteMany({ where: { appointment: { studentName: 'Meera Kapoor' } } });
+    await prisma.appointment.deleteMany({ where: { studentName: 'Meera Kapoor' } });
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email: 'sameer.joshi@codeyoung.in' },
+      include: { mentor: true },
+    });
+    if (existingUser) {
+      if (existingUser.mentor) {
+        await prisma.appointment.deleteMany({ where: { mentorId: existingUser.mentor.id } });
+        await prisma.mentorAvailability.deleteMany({ where: { mentorId: existingUser.mentor.id } });
+        await prisma.mentor.delete({ where: { id: existingUser.mentor.id } });
+      }
+      await prisma.user.delete({ where: { id: existingUser.id } });
+    }
   });
 
   afterAll(async () => {
@@ -34,7 +53,13 @@ describe('Phase P8: Admin Operations, Email Logs & Notifications Integration', (
       await prisma.trialAttendance.deleteMany({ where: { appointmentId: testBookingAppointmentId } });
       await prisma.appointment.deleteMany({ where: { id: testBookingAppointmentId } });
     }
+    await prisma.notification.deleteMany({ where: { appointment: { studentName: 'Meera Kapoor' } } });
+    await prisma.emailLog.deleteMany({ where: { appointment: { studentName: 'Meera Kapoor' } } });
+    await prisma.trialAttendance.deleteMany({ where: { appointment: { studentName: 'Meera Kapoor' } } });
+    await prisma.appointment.deleteMany({ where: { studentName: 'Meera Kapoor' } });
+
     if (createdMentorId) {
+      await prisma.appointment.deleteMany({ where: { mentorId: createdMentorId } });
       await prisma.mentorAvailability.deleteMany({ where: { mentorId: createdMentorId } });
       const mentor = await prisma.mentor.findUnique({ where: { id: createdMentorId } });
       if (mentor) {

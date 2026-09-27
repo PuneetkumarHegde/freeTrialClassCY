@@ -33,12 +33,12 @@ export const DynamicQuoteBanner: React.FC<DynamicQuoteBannerProps> = ({ classNam
         initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="group inline-flex items-center gap-2.5 bg-slate-900/[0.03] hover:bg-slate-900/[0.06] border border-slate-200/80 px-4 py-1.5 rounded-full text-xs text-slate-600 transition-all duration-200 shadow-2xs cursor-default max-w-xl text-center"
+        className="group inline-flex items-center gap-2.5 bg-indigo-50/70 hover:bg-indigo-100/50 border border-indigo-100 px-4 py-1.5 rounded-full text-xs text-indigo-950 transition-all duration-200 shadow-2xs cursor-default max-w-xl text-center"
       >
-        <span className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 shrink-0">
-          <Sparkles className="w-3 h-3 text-blue-600" />
+        <span className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 shrink-0">
+          <Sparkles className="w-3 h-3 text-indigo-600" />
         </span>
-        <span className="font-medium italic tracking-normal text-slate-700 font-serif sm:text-xs text-[11px]">
+        <span className="font-medium italic tracking-normal text-indigo-950 font-serif sm:text-xs text-[11px]">
           &ldquo;{currentQuote.quote}&rdquo;
         </span>
         <button
@@ -46,10 +46,10 @@ export const DynamicQuoteBanner: React.FC<DynamicQuoteBannerProps> = ({ classNam
           onClick={handleNextQuote}
           aria-label="Show another inspirational quote"
           title="Inspire with another thought"
-          className="text-slate-400 hover:text-blue-600 active:scale-95 transition-all p-0.5 rounded-full"
+          className="text-indigo-400 hover:text-indigo-700 active:scale-95 transition-all p-0.5 rounded-full cursor-pointer"
         >
           <RefreshCw
-            className={`w-3 h-3 ${isRotating ? 'animate-spin text-blue-600' : ''}`}
+            className={`w-3 h-3 ${isRotating ? 'animate-spin text-indigo-600' : ''}`}
           />
         </button>
       </motion.div>

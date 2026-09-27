@@ -8,6 +8,12 @@ import { MentorWithUser } from '../../types/mentor.types';
 // In-memory mock repositories for isolated unit testing
 class MockMentorRepository extends MentorRepository {
   private mentors: Map<string, MentorWithUser> = new Map();
+  private unavailabilities: Array<{
+    mentorId: string;
+    startDate: Date;
+    endDate: Date;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  }> = [];
 
   constructor() {
     super();
@@ -15,6 +21,15 @@ class MockMentorRepository extends MentorRepository {
 
   addMentor(mentor: MentorWithUser) {
     this.mentors.set(mentor.id, mentor);
+  }
+
+  addMockUnavailability(
+    mentorId: string,
+    startDate: Date,
+    endDate: Date,
+    status: 'PENDING' | 'APPROVED' | 'REJECTED' = 'APPROVED'
+  ) {
+    this.unavailabilities.push({ mentorId, startDate, endDate, status });
   }
 
   async findById(id: string): Promise<MentorWithUser | null> {
@@ -27,6 +42,16 @@ class MockMentorRepository extends MentorRepository {
       return list.filter((m) => m.isActive === options.isActive);
     }
     return list;
+  }
+
+  async hasUnavailabilityException(mentorId: string, startTime: Date, endTime: Date): Promise<boolean> {
+    return this.unavailabilities.some(
+      (u) =>
+        u.mentorId === mentorId &&
+        u.status === 'APPROVED' &&
+        u.startDate < endTime &&
+        u.endDate > startTime
+    );
   }
 }
 

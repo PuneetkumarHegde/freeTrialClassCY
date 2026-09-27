@@ -149,7 +149,7 @@ export class EmailService {
       body: bodyParams.toString(),
     });
 
-    const data = await response.json().catch(() => ({}));
+    const data = (await response.json().catch(() => ({}))) as any;
 
     if (!response.ok || (!data.access_token && !data.refresh_token)) {
       const errorMsg = data.error_description || data.error || `HTTP ${response.status} token exchange error`;
@@ -249,7 +249,7 @@ export class EmailService {
         body: bodyParams.toString(),
       });
 
-      const data = await response.json().catch(() => ({}));
+      const data = (await response.json().catch(() => ({}))) as any;
 
       if (!response.ok || !data.access_token) {
         const errorDetail = data.error_description || data.error || response.statusText || 'Failed to refresh token';
@@ -299,7 +299,7 @@ export class EmailService {
       }),
     });
 
-    const data = await response.json().catch(() => ({}));
+    const data = (await response.json().catch(() => ({}))) as any;
 
     if (!response.ok || !data.id) {
       const errorMsg =

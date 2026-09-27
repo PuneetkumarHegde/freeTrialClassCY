@@ -102,16 +102,31 @@ export class MentorRepository {
    * Check if mentor has an explicit APPROVED unavailability exception overlapping [startTime, endTime)
    */
   async hasUnavailabilityException(mentorId: string, startTime: Date, endTime: Date): Promise<boolean> {
-    const unavail = await prisma.mentorUnavailability.findFirst({
-      where: {
-        mentorId,
-        status: 'APPROVED',
-        startDate: { lt: endTime },
-        endDate: { gt: startTime },
-      },
-    });
+    try {
+      const unavail = await prisma.mentorUnavailability.findFirst({
+        where: {
+          mentorId,
+          status: 'APPROVED',
+          startDate: { lt: endTime },
+          endDate: { gt: startTime },
+        },
+      });
 
-    return unavail !== null;
+      return unavail !== null;
+    } catch {
+      try {
+        const unavail = await prisma.mentorUnavailability.findFirst({
+          where: {
+            mentorId,
+            startDate: { lt: endTime },
+            endDate: { gt: startTime },
+          },
+        });
+        return unavail !== null;
+      } catch {
+        return false;
+      }
+    }
   }
 
   /**

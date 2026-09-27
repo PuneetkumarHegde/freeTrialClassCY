@@ -2,18 +2,32 @@ import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
 
-// Ensure .env is explicitly loaded from root workspace, cwd, or fallback files
-const candidates = [
-  path.resolve(process.cwd(), '.env'),
-  path.resolve(process.cwd(), '.env.local'),
-  path.resolve(process.cwd(), 'server/.env'),
-  path.resolve(process.cwd(), '.env.example'),
-];
+// 1. Load canonical root .env file if it exists (single location, no duplicate .env files)
+const rootEnvPath = path.resolve(process.cwd(), '.env');
+if (fs.existsSync(rootEnvPath)) {
+  dotenv.config({ path: rootEnvPath });
+}
 
-for (const candidate of candidates) {
-  if (fs.existsSync(candidate)) {
-    dotenv.config({ path: candidate });
+// 2. Load AI Studio runtime secrets / environment configuration (/app/.dev.env.json) if present
+const devEnvJsonPath = path.resolve('/app/.dev.env.json');
+if (fs.existsSync(devEnvJsonPath)) {
+  try {
+    const raw = fs.readFileSync(devEnvJsonPath, 'utf-8');
+    const devEnv = JSON.parse(raw);
+    for (const [key, value] of Object.entries(devEnv)) {
+      if (value !== undefined && value !== null && !process.env[key]) {
+        process.env[key] = String(value);
+      }
+    }
+  } catch {
+    // Ignore JSON parse errors
   }
+}
+
+// 3. Fallback defaults from .env.example without overwriting existing environment variables
+const exampleEnvPath = path.resolve(process.cwd(), '.env.example');
+if (fs.existsSync(exampleEnvPath)) {
+  dotenv.config({ path: exampleEnvPath });
 }
 
 export const config = {

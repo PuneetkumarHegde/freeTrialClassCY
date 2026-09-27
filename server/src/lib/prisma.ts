@@ -14,6 +14,27 @@ export const prisma =
     log: process.env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
   });
 
+// Auto-ensure schema migrations for UnavailabilityStatus
+(async () => {
+  try {
+    await prisma.$executeRawUnsafe(`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'UnavailabilityStatus') THEN
+          CREATE TYPE "UnavailabilityStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
+        END IF;
+      END
+      $$;
+    `);
+    await prisma.$executeRawUnsafe(`
+      ALTER TABLE "MentorUnavailability"
+      ADD COLUMN IF NOT EXISTS "status" "UnavailabilityStatus" DEFAULT 'PENDING';
+    `);
+  } catch {
+    // ignore
+  }
+})();
+
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }

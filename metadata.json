@@ -1,0 +1,6 @@
+{
+  "name": "Codeyoung Trial Class Booking",
+  "description": "Experience Codeyoung before you join. Book a 1-on-1 live trial class and build a real playable project.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

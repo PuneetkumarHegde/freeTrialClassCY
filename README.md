@@ -1,4 +1,80 @@
-# Codeyoung Trial Class Booking Platform
+Quick Start — Run the Project
+
+Run these commands first. The detailed project documentation is below.
+
+1. Install dependencies
+
+cd codeyoung-platform
+npm install
+
+If frontend and backend have separate package.json files:
+
+cd server
+npm install
+
+cd ../client
+npm install
+
+2. Configure environment
+
+Create/configure the project's existing environment variables for PostgreSQL, JWT authentication, and Gmail OAuth.
+
+Do not commit .env files or secrets to GitHub.
+
+3. Generate Prisma client
+
+cd server
+npx prisma generate
+
+4. Run database migrations
+
+npx prisma migrate deploy
+
+For local development when creating/applying a new migration:
+
+npx prisma migrate dev
+
+5. Seed the database
+
+npm run seed
+
+6. Start the backend
+
+npm run dev
+
+Backend:
+
+http://localhost:3000
+
+7. Start the frontend
+
+Open a second terminal:
+
+cd client
+npm run dev
+
+Frontend:
+
+http://localhost:5173
+
+8. Verify the backend
+
+Open:
+
+http://localhost:3000/api/health
+
+The API should return a successful health response.
+
+9. Run tests
+
+From the server directory:
+
+npm test
+
+10. Build/type-check
+
+npm run build
+npm run typecheck# Codeyoung Trial Class Booking Platform
 
 A full-stack appointment booking platform for Codeyoung's free trial-class experience.
 

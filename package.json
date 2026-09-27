@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build",
-    "start": "node server.ts",
+    "build": "prisma generate && vite build && esbuild server.ts --bundle --platform=node --format=esm --target=es2022 --packages=external --outfile=dist-server/server.js",
+    "start": "node dist-server/server.js",
     "server:dev": "tsx server/src/server.ts",
     "server:build": "tsc -p server/tsconfig.json",
     "db:generate": "node scripts/prisma-run.js generate",

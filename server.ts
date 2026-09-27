@@ -1,5 +1,6 @@
 import './server/src/lib/env';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
@@ -21,7 +22,9 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     // Serve static files in production build
-    const distPath = path.resolve(__dirname, 'dist');
+    const distPath = fs.existsSync(path.resolve(__dirname, '../dist'))
+      ? path.resolve(__dirname, '../dist')
+      : path.resolve(process.cwd(), 'dist');
     app.use(express.static(distPath));
     app.get('*', (_req, res) => {
       res.sendFile(path.resolve(distPath, 'index.html'));

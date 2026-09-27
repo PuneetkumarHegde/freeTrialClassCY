@@ -4,17 +4,19 @@
  */
 export function normalizeDatabaseUrl(rawUrl?: string): string {
   if (!rawUrl) return '';
+  const trimmed = rawUrl.trim().replace(/^["']|["']$/g, '');
+  if (!trimmed) return '';
   try {
-    const protocolIdx = rawUrl.indexOf('://');
-    if (protocolIdx === -1) return rawUrl;
-    const protocol = rawUrl.substring(0, protocolIdx + 3);
-    const rest = rawUrl.substring(protocolIdx + 3);
+    const protocolIdx = trimmed.indexOf('://');
+    if (protocolIdx === -1) return trimmed;
+    const protocol = trimmed.substring(0, protocolIdx + 3);
+    const rest = trimmed.substring(protocolIdx + 3);
     const atIdx = rest.lastIndexOf('@');
-    if (atIdx === -1) return rawUrl;
+    if (atIdx === -1) return trimmed;
     const userPass = rest.substring(0, atIdx);
     const hostRest = rest.substring(atIdx + 1);
     const colonIdx = userPass.indexOf(':');
-    if (colonIdx === -1) return rawUrl;
+    if (colonIdx === -1) return trimmed;
     const user = userPass.substring(0, colonIdx);
     const pass = userPass.substring(colonIdx + 1);
 
@@ -23,6 +25,6 @@ export function normalizeDatabaseUrl(rawUrl?: string): string {
     const decodedPass = decodeURIComponent(pass);
     return `${protocol}${encodeURIComponent(decodedUser)}:${encodeURIComponent(decodedPass)}@${hostRest}`;
   } catch {
-    return rawUrl;
+    return trimmed;
   }
 }

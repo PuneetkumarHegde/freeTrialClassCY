@@ -39,6 +39,7 @@ var config = {
 
 // server.ts
 import path4 from "path";
+import fs4 from "fs";
 import { fileURLToPath } from "url";
 import express2 from "express";
 import { createServer as createViteServer } from "vite";
@@ -79,24 +80,26 @@ import { PrismaClient } from "@prisma/client";
 // server/src/lib/dbUrl.ts
 function normalizeDatabaseUrl(rawUrl) {
   if (!rawUrl) return "";
+  const trimmed = rawUrl.trim().replace(/^["']|["']$/g, "");
+  if (!trimmed) return "";
   try {
-    const protocolIdx = rawUrl.indexOf("://");
-    if (protocolIdx === -1) return rawUrl;
-    const protocol = rawUrl.substring(0, protocolIdx + 3);
-    const rest = rawUrl.substring(protocolIdx + 3);
+    const protocolIdx = trimmed.indexOf("://");
+    if (protocolIdx === -1) return trimmed;
+    const protocol = trimmed.substring(0, protocolIdx + 3);
+    const rest = trimmed.substring(protocolIdx + 3);
     const atIdx = rest.lastIndexOf("@");
-    if (atIdx === -1) return rawUrl;
+    if (atIdx === -1) return trimmed;
     const userPass = rest.substring(0, atIdx);
     const hostRest = rest.substring(atIdx + 1);
     const colonIdx = userPass.indexOf(":");
-    if (colonIdx === -1) return rawUrl;
+    if (colonIdx === -1) return trimmed;
     const user = userPass.substring(0, colonIdx);
     const pass = userPass.substring(colonIdx + 1);
     const decodedUser = decodeURIComponent(user);
     const decodedPass = decodeURIComponent(pass);
     return `${protocol}${encodeURIComponent(decodedUser)}:${encodeURIComponent(decodedPass)}@${hostRest}`;
   } catch {
-    return rawUrl;
+    return trimmed;
   }
 }
 
@@ -4875,7 +4878,7 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path4.resolve(__dirname, "dist");
+    const distPath = fs4.existsSync(path4.resolve(__dirname, "../dist")) ? path4.resolve(__dirname, "../dist") : path4.resolve(process.cwd(), "dist");
     app.use(express2.static(distPath));
     app.get("*", (_req, res) => {
       res.sendFile(path4.resolve(distPath, "index.html"));

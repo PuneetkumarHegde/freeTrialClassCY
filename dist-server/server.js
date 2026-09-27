@@ -1610,14 +1610,20 @@ var EmailService = class {
     const hasClientId = Boolean(config2.clientId);
     const hasClientSecret = Boolean(config2.clientSecret);
     const hasRefreshToken = Boolean(config2.refreshToken);
+    const hasSenderEmail = Boolean(config2.senderEmail);
+    const hasBaseUrl = Boolean(config2.baseUrl);
     const isConfigured = hasClientId && hasClientSecret && hasRefreshToken;
     return {
       provider: "Gmail API (OAuth 2.0)",
+      isConfigured: isConfigured ? "YES" : "NO",
+      variables: {
+        GOOGLE_CLIENT_ID: hasClientId ? "PRESENT" : "MISSING",
+        GOOGLE_CLIENT_SECRET: hasClientSecret ? "PRESENT" : "MISSING",
+        GOOGLE_REFRESH_TOKEN: hasRefreshToken ? "PRESENT" : "MISSING",
+        GMAIL_SENDER_EMAIL: hasSenderEmail ? "PRESENT" : "MISSING",
+        APP_BASE_URL: hasBaseUrl ? "PRESENT" : "MISSING"
+      },
       senderEmail: config2.senderEmail,
-      isConfigured,
-      hasClientId,
-      hasClientSecret,
-      hasRefreshToken,
       redirectUri: config2.redirectUri
     };
   }

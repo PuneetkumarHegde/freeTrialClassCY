@@ -180,15 +180,21 @@ export class EmailService {
     const hasClientId = Boolean(config.clientId);
     const hasClientSecret = Boolean(config.clientSecret);
     const hasRefreshToken = Boolean(config.refreshToken);
+    const hasSenderEmail = Boolean(config.senderEmail);
+    const hasBaseUrl = Boolean(config.baseUrl);
     const isConfigured = hasClientId && hasClientSecret && hasRefreshToken;
 
     return {
       provider: 'Gmail API (OAuth 2.0)',
+      isConfigured: isConfigured ? 'YES' : 'NO',
+      variables: {
+        GOOGLE_CLIENT_ID: hasClientId ? 'PRESENT' : 'MISSING',
+        GOOGLE_CLIENT_SECRET: hasClientSecret ? 'PRESENT' : 'MISSING',
+        GOOGLE_REFRESH_TOKEN: hasRefreshToken ? 'PRESENT' : 'MISSING',
+        GMAIL_SENDER_EMAIL: hasSenderEmail ? 'PRESENT' : 'MISSING',
+        APP_BASE_URL: hasBaseUrl ? 'PRESENT' : 'MISSING',
+      },
       senderEmail: config.senderEmail,
-      isConfigured,
-      hasClientId,
-      hasClientSecret,
-      hasRefreshToken,
       redirectUri: config.redirectUri,
     };
   }

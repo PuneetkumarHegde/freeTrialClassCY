@@ -5,6 +5,8 @@ A production-oriented full-stack trial-class booking platform for Codeyoung.
 The platform allows parents to book a free 1:1 trial class without creating an account first. The system automatically assigns an available mentor, handles mentor capacity and timezone/DST rules, sends class details by email, and provides separate dashboards for Students/Parents, Mentors, and Admins.
 
 ---
+Production URL: https://freetrialclasscy.onrender.com
+Experience the Codeyoung Trial Class Booking Platform
 
 ## 1. Project Overview
 

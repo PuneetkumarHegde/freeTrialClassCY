@@ -682,12 +682,153 @@ export function HomePage() {
                     <div className="relative bg-white rounded-3xl border border-indigo-100 shadow-xl shadow-indigo-950/5 p-4 sm:p-5 overflow-hidden">
                       {/* Visual Asset Container */}
                       <div className="relative overflow-hidden rounded-2xl bg-indigo-50/50 aspect-[4/3] border border-indigo-100/60">
-                        <img
-                          src="/girl-learning-laptop.svg"
-                          alt="Professional, friendly young girl smiling and engaged while learning coding on a modern laptop with Codeyoung instructor"
-                          className="w-full h-full object-cover"
-                          referrerPolicy="no-referrer"
-                        />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%" className="w-full h-full object-cover">
+                          <defs>
+                            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#F5F3FF"/>
+                              <stop offset="50%" stopColor="#EEF2FF"/>
+                              <stop offset="100%" stopColor="#E0E7FF"/>
+                            </linearGradient>
+                            <linearGradient id="indigoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#4F46E5"/>
+                              <stop offset="100%" stopColor="#312E81"/>
+                            </linearGradient>
+                            <linearGradient id="lavenderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stopColor="#C7D2FE"/>
+                              <stop offset="100%" stopColor="#DDD6FE"/>
+                            </linearGradient>
+                            <linearGradient id="screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                              <stop offset="0%" stopColor="#1E1B4B"/>
+                              <stop offset="100%" stopColor="#0F172A"/>
+                            </linearGradient>
+                            <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                              <stop offset="0%" stopColor="#37241E"/>
+                              <stop offset="100%" stopColor="#1F1610"/>
+                            </linearGradient>
+                            <linearGradient id="hoodieGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#6366F1"/>
+                              <stop offset="100%" stopColor="#4338CA"/>
+                            </linearGradient>
+                            <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+                              <feDropShadow dx="0" dy="12" stdDeviation="16" floodColor="#312E81" floodOpacity="0.12"/>
+                            </filter>
+                            <filter id="badgeShadow" x="-15%" y="-15%" width="130%" height="130%">
+                              <feDropShadow dx="0" dy="6" stdDeviation="10" floodColor="#1E1B4B" floodOpacity="0.08"/>
+                            </filter>
+                          </defs>
+
+                          {/* Background Canvas */}
+                          <rect width="800" height="600" rx="28" fill="url(#bgGrad)"/>
+
+                          {/* Ambient Decorative Shapes */}
+                          <circle cx="680" cy="120" r="160" fill="#E0E7FF" opacity="0.6"/>
+                          <circle cx="120" cy="480" r="140" fill="#EDE9FE" opacity="0.7"/>
+                          <path d="M 620,80 L 640,60 L 660,80 L 640,100 Z" fill="#818CF8" opacity="0.3"/>
+                          <circle cx="700" cy="220" r="8" fill="#A5B4FC" opacity="0.5"/>
+                          <circle cx="160" cy="140" r="6" fill="#818CF8" opacity="0.4"/>
+                          <circle cx="640" cy="380" r="10" fill="#C7D2FE" opacity="0.5"/>
+
+                          {/* Modern Desk Surface */}
+                          <path d="M 40,490 Q 400,480 760,490 L 780,590 L 20,590 Z" fill="#FFFFFF" opacity="0.9" filter="url(#softShadow)"/>
+                          <line x1="40" y1="490" x2="760" y2="490" stroke="#C7D2FE" strokeWidth="2"/>
+
+                          {/* Desk Items */}
+                          <rect x="650" y="440" width="34" height="48" rx="6" fill="#EEF2FF" stroke="#A5B4FC" strokeWidth="2"/>
+                          <path d="M 684,450 C 694,450 694,472 684,472" fill="none" stroke="#A5B4FC" strokeWidth="3"/>
+                          <line x1="660" y1="440" x2="655" y2="415" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round"/>
+                          <line x1="668" y1="440" x2="672" y2="410" stroke="#6366F1" strokeWidth="3" strokeLinecap="round"/>
+
+                          {/* Student Character */}
+                          <g transform="translate(190, 110)">
+                            <path d="M 120,130 C 90,140 70,220 85,280 C 95,310 115,330 110,360 C 130,350 150,330 150,290 Z" fill="url(#hairGrad)"/>
+                            <path d="M 240,130 C 270,140 290,220 275,280 C 265,310 245,330 250,360 C 230,350 210,330 210,290 Z" fill="url(#hairGrad)"/>
+                            <path d="M 105,370 Q 180,330 255,370 L 290,440 L 70,440 Z" fill="url(#hoodieGrad)"/>
+                            <path d="M 160,345 Q 180,365 200,345" fill="none" stroke="#A5B4FC" strokeWidth="3"/>
+                            <line x1="172" y1="358" x2="170" y2="390" stroke="#E0E7FF" strokeWidth="2" strokeLinecap="round"/>
+                            <line x1="188" y1="358" x2="190" y2="390" stroke="#E0E7FF" strokeWidth="2" strokeLinecap="round"/>
+                            <rect x="165" y="275" width="30" height="35" rx="10" fill="#F8D3B4"/>
+                            <ellipse cx="180" cy="205" rx="60" ry="70" fill="#FCE5D2"/>
+                            <circle cx="120" cy="205" r="12" fill="#F8D3B4"/>
+                            <circle cx="240" cy="205" r="12" fill="#F8D3B4"/>
+                            <path d="M 152,198 C 157,192 165,192 170,198" fill="none" stroke="#1E1B4B" strokeWidth="3" strokeLinecap="round"/>
+                            <circle cx="161" cy="202" r="3.5" fill="#1E1B4B"/>
+                            <circle cx="163" cy="200" r="1" fill="#FFFFFF"/>
+                            <path d="M 190,198 C 195,192 203,192 208,198" fill="none" stroke="#1E1B4B" strokeWidth="3" strokeLinecap="round"/>
+                            <circle cx="199" cy="202" r="3.5" fill="#1E1B4B"/>
+                            <circle cx="201" cy="200" r="1" fill="#FFFFFF"/>
+                            <path d="M 150,188 C 158,184 168,186 172,189" fill="none" stroke="#37241E" strokeWidth="2.5" strokeLinecap="round"/>
+                            <path d="M 188,189 C 192,186 202,184 210,188" fill="none" stroke="#37241E" strokeWidth="2.5" strokeLinecap="round"/>
+                            <ellipse cx="148" cy="216" rx="8" ry="5" fill="#FB7185" opacity="0.35"/>
+                            <ellipse cx="212" cy="216" rx="8" ry="5" fill="#FB7185" opacity="0.35"/>
+                            <path d="M 180,206 Q 182,212 178,214" fill="none" stroke="#E0A98B" strokeWidth="2" strokeLinecap="round"/>
+                            <path d="M 168,226 Q 180,240 192,226" fill="#FFFFFF" stroke="#E11D48" strokeWidth="2"/>
+                            <path d="M 172,228 Q 180,234 188,228" fill="#F43F5E"/>
+                            <path d="M 120,185 C 130,140 170,135 180,135 C 220,135 235,160 240,185 C 235,170 215,165 195,165 C 175,165 155,170 120,185 Z" fill="url(#hairGrad)"/>
+                            <path d="M 120,180 Q 145,190 160,175 Q 175,190 200,170 Q 220,190 240,180 Q 230,135 180,135 Q 130,135 120,180 Z" fill="url(#hairGrad)"/>
+                            <path d="M 124,175 C 140,142 170,132 180,132 C 190,132 220,142 236,175" fill="none" stroke="#4F46E5" strokeWidth="6" strokeLinecap="round"/>
+                            <circle cx="132" cy="165" r="7" fill="#818CF8"/>
+                          </g>
+
+                          {/* Modern Sleek Laptop */}
+                          <g transform="translate(240, 310)" filter="url(#softShadow)">
+                            <rect x="20" y="20" width="280" height="175" rx="12" fill="#1E1B4B" stroke="#4338CA" strokeWidth="2"/>
+                            <rect x="30" y="30" width="260" height="155" rx="6" fill="url(#screenGrad)"/>
+                            <rect x="30" y="30" width="260" height="16" rx="4" fill="#312E81"/>
+                            <circle cx="40" cy="38" r="3" fill="#EF4444"/>
+                            <circle cx="48" cy="38" r="3" fill="#F59E0B"/>
+                            <circle cx="56" cy="38" r="3" fill="#10B981"/>
+                            <text x="140" y="41" fill="#C7D2FE" fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">game.py · Codeyoung Project</text>
+                            <rect x="42" y="56" width="115" height="16" rx="4" fill="#4F46E5"/>
+                            <text x="48" y="67" fill="#FFFFFF" fontSize="7.5" fontFamily="sans-serif" fontWeight="bold">when 🚀 GreenFlag clicked</text>
+                            <rect x="52" y="76" width="105" height="15" rx="4" fill="#6366F1"/>
+                            <text x="58" y="87" fill="#FFFFFF" fontSize="7.5" fontFamily="sans-serif">set score to 100</text>
+                            <rect x="52" y="95" width="115" height="15" rx="4" fill="#818CF8"/>
+                            <text x="58" y="106" fill="#FFFFFF" fontSize="7.5" fontFamily="sans-serif">forever: move player (x, y)</text>
+                            <rect x="62" y="114" width="95" height="15" rx="4" fill="#A855F7"/>
+                            <text x="68" y="125" fill="#FFFFFF" fontSize="7.5" fontFamily="sans-serif">play sound ✨ &quot;Victory&quot;</text>
+                            <rect x="175" y="54" width="105" height="120" rx="6" fill="#020617" stroke="#4338CA" strokeWidth="1"/>
+                            <circle cx="230" cy="110" r="35" fill="#312E81" opacity="0.4"/>
+                            <path d="M 227,85 L 233,85 L 235,105 L 225,105 Z" fill="#EEF2FF"/>
+                            <polygon points="230,78 224,88 236,88" fill="#EF4444"/>
+                            <polygon points="223,100 220,108 227,105" fill="#6366F1"/>
+                            <polygon points="237,100 240,108 233,105" fill="#6366F1"/>
+                            <polygon points="228,105 232,105 230,113" fill="#F59E0B"/>
+                            <circle cx="190" cy="75" r="1.5" fill="#FFFFFF"/>
+                            <circle cx="260" cy="85" r="1" fill="#FEF08A"/>
+                            <circle cx="210" cy="135" r="1.5" fill="#FFFFFF"/>
+                            <circle cx="255" cy="145" r="1" fill="#FEF08A"/>
+                            <rect x="180" y="58" width="45" height="10" rx="3" fill="#1E1B4B" opacity="0.8"/>
+                            <text x="184" y="65" fill="#34D399" fontSize="6" fontFamily="monospace">SCORE: 100</text>
+                            <path d="M 0,195 L 320,195 L 340,210 L -20,210 Z" fill="#E0E7FF" stroke="#C7D2FE" strokeWidth="1.5"/>
+                            <rect x="110" y="198" width="100" height="7" rx="2" fill="#CBD5E1"/>
+                            <path d="M 140,195 L 180,195 L 180,197 L 140,197 Z" fill="#94A3B8"/>
+                          </g>
+
+                          {/* Girl's Hands */}
+                          <ellipse cx="380" cy="510" rx="22" ry="14" fill="#FCE5D2" transform="rotate(-10, 380, 510)"/>
+                          <ellipse cx="440" cy="510" rx="22" ry="14" fill="#FCE5D2" transform="rotate(10, 440, 510)"/>
+
+                          {/* Floating Mentor Co-Pilot Feedback Badge */}
+                          <g transform="translate(510, 90)" filter="url(#badgeShadow)">
+                            <rect width="250" height="88" rx="16" fill="#FFFFFF" stroke="#E0E7FF" strokeWidth="2"/>
+                            <circle cx="44" cy="44" r="22" fill="#EEF2FF" stroke="#6366F1" strokeWidth="2"/>
+                            <text x="44" y="49" fontSize="14" textAnchor="middle">👩‍🏫</text>
+                            <circle cx="60" cy="28" r="5" fill="#10B981" stroke="#FFFFFF" strokeWidth="1.5"/>
+                            <text x="76" y="32" fill="#1E1B4B" fontSize="12" fontFamily="sans-serif" fontWeight="bold">Live Mentor Feedback</text>
+                            <text x="76" y="48" fill="#4F46E5" fontSize="11" fontFamily="sans-serif" fontWeight="600">&ldquo;Brilliant logic, Maya!&rdquo;</text>
+                            <text x="76" y="64" fill="#64748B" fontSize="10" fontFamily="sans-serif">1-on-1 Co-Pilot Debugging</text>
+                          </g>
+
+                          {/* Floating Achievement Badge */}
+                          <g transform="translate(45, 340)" filter="url(#badgeShadow)">
+                            <rect width="210" height="76" rx="16" fill="#FFFFFF" stroke="#EDE9FE" strokeWidth="2"/>
+                            <circle cx="38" cy="38" r="20" fill="#F5F3FF" stroke="#8B5CF6" strokeWidth="1.5"/>
+                            <text x="38" y="44" fontSize="14" textAnchor="middle">🏆</text>
+                            <text x="68" y="30" fill="#1E1B4B" fontSize="11" fontFamily="sans-serif" fontWeight="bold">STEM.org Certified</text>
+                            <text x="68" y="46" fill="#6B21A8" fontSize="10" fontFamily="sans-serif" fontWeight="600">60-Min Project Shipped</text>
+                            <text x="68" y="60" fill="#64748B" fontSize="9" fontFamily="sans-serif">Playable game to keep</text>
+                          </g>
+                        </svg>
                       </div>
 
                       {/* Trust Reassurance & Quick Booking Bar */}

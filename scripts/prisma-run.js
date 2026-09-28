@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawn } from 'child_process';
+import path from 'path';
 
 function normalizeDatabaseUrl(rawUrl) {
   if (!rawUrl) return '';
@@ -28,7 +29,8 @@ if (env.DATABASE_URL) {
   env.DATABASE_URL = normalizeDatabaseUrl(env.DATABASE_URL);
 }
 
-const child = spawn('npx', ['prisma', ...args], {
+const prismaCliPath = path.resolve(process.cwd(), 'node_modules/prisma/build/index.js');
+const child = spawn(process.execPath, [prismaCliPath, ...args], {
   stdio: 'inherit',
   env,
 });
